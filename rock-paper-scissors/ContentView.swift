@@ -5,7 +5,7 @@
 //  Created by Mac mini on 2025/04/30.
 //
 
-// testing for Github
+// testing for Github and testing
 
 import SwiftUI
 
