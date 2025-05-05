@@ -29,6 +29,25 @@
 		9AB73DC72DC223550057A726 /* rock-paper-scissorsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "rock-paper-scissorsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		9A3B72322DC82323006CD8E4 /* Exceptions for "rock-paper-scissorsUITests" folder in "rock-paper-scissors" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				correct.mp3,
+				wrong.mp3,
+			);
+			target = 9AB73DAC2DC223530057A726 /* rock-paper-scissors */;
+		};
+		9A3B72332DC82323006CD8E4 /* Exceptions for "rock-paper-scissorsUITests" folder in "rock-paper-scissorsUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				correct.mp3,
+				wrong.mp3,
+			);
+			target = 9AB73DC62DC223550057A726 /* rock-paper-scissorsUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		9AB73DAF2DC223530057A726 /* rock-paper-scissors */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -42,6 +61,10 @@
 		};
 		9AB73DCA2DC223550057A726 /* rock-paper-scissorsUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9A3B72322DC82323006CD8E4 /* Exceptions for "rock-paper-scissorsUITests" folder in "rock-paper-scissors" target */,
+				9A3B72332DC82323006CD8E4 /* Exceptions for "rock-paper-scissorsUITests" folder in "rock-paper-scissorsUITests" target */,
+			);
 			path = "rock-paper-scissorsUITests";
 			sourceTree = "<group>";
 		};

@@ -7,8 +7,10 @@
 
 
 import SwiftUI
+import AVFoundation
 
 struct ContentView: View {
+    @State private var audioPlayer: AVAudioPlayer?
     let timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
     
     @State var screenMode = "title"
@@ -16,7 +18,7 @@ struct ContentView: View {
     //hands 0:initialized, 1:rock, 2:paper, 3:scissors
     @State var playerHand = 0
     @State var cpuHand = 0
-    @State var timeLimit = 5.0
+    @State var timeLimit = 30.0
     @State var elapsedTime = 0.0
     
     // instruction 0:initialized, 1:win, 2:lose, 3:draw
@@ -254,8 +256,10 @@ struct ContentView: View {
                     Button{
                         playerHand = 1
                         if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
+                            playSound(named: "correct")
                             score += 1
                         }else {
+                            playSound(named: "wrong")
                             score -= 1
                         }
                         cpuHand = Int.random(in: 1...3)
@@ -272,8 +276,10 @@ struct ContentView: View {
                     Button{
                         playerHand = 2
                         if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
+                            playSound(named: "correct")
                             score += 1
                         }else {
+                            playSound(named: "wrong")
                             score -= 1
                         }
                         cpuHand = Int.random(in: 1...3)
@@ -290,8 +296,10 @@ struct ContentView: View {
                     Button{
                         playerHand = 3
                         if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
+                            playSound(named: "correct")
                             score += 1
                         }else {
+                            playSound(named: "wrong")
                             score -= 1
                         }
                         cpuHand = Int.random(in: 1...3)
@@ -396,6 +404,17 @@ struct ContentView: View {
             return 1 //win
         }else {
             return 2 //lose
+        }
+    }
+    
+    func playSound(named soundName: String){
+        if let soundURL = Bundle.main.url(forResource: soundName, withExtension: "mp3"){
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+                audioPlayer?.play()
+            } catch {
+                print("Sound error: \(error.localizedDescription)")
+            }
         }
     }
     
