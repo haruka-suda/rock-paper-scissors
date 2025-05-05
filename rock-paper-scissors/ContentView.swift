@@ -18,7 +18,7 @@ struct ContentView: View {
     //hands 0:initialized, 1:rock, 2:paper, 3:scissors
     @State var playerHand = 0
     @State var cpuHand = 0
-    @State var timeLimit = 30.0
+    @State var timeLimit = 60.0
     @State var elapsedTime = 0.0
     
     // instruction 0:initialized, 1:win, 2:lose, 3:draw
