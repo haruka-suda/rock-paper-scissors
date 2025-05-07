@@ -13,22 +13,44 @@ struct ContentView: View {
     @State private var audioPlayer: AVAudioPlayer?
     let timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
     
-    @State var screenMode = "title"
+    enum ScreenMode {
+        case title
+        case normalFirst
+        case normalSecond
+        case brainTraining
+        case finished
+        case result
+    }
     
-    //hands 0:initialized, 1:rock, 2:paper, 3:scissors
-    @State var playerHand = 0
-    @State var cpuHand = 0
+    enum RPSHand: CaseIterable {
+        case rock
+        case paper
+        case scissors
+    }
+    
+    enum RPSResult: CaseIterable {
+        case win
+        case lose
+        case draw
+    }
+    
+    
+    @State var screenMode: ScreenMode = .title
+    
+    
+    @State var playerHand: RPSHand = .rock
+    @State var cpuHand: RPSHand = .rock
     @State var timeLimit = 60.0
     @State var elapsedTime = 0.0
     
-    // instruction 0:initialized, 1:win, 2:lose, 3:draw
-    @State var instruction = 0
+   
+    @State var instruction: RPSResult = .win
     @State var score = 0
     @State var highScore = 0
     
     var body: some View {
         
-        if screenMode == "title"{
+        if screenMode == .title{
             VStack{
                 Text("RPS Challenge")
                     .font(.largeTitle)
@@ -51,7 +73,7 @@ struct ContentView: View {
                 
                 VStack{
                     Button{
-                        screenMode = "normalMode"
+                        screenMode = .normalFirst
                     } label: {
                         Text("Normal Mode")
                             .font(.title)
@@ -64,11 +86,11 @@ struct ContentView: View {
                     }
                     
                     Button{
-                        screenMode = "brainTraining"
+                        screenMode = .brainTraining
                         score = 0
                         elapsedTime = 0
-                        instruction = Int.random(in: 1...3)
-                        cpuHand = Int.random(in: 1...3)
+                        instruction = RPSResult.allCases.randomElement()!
+                        cpuHand = RPSHand.allCases.randomElement()!
                     } label: {
                         Text("Brain Training")
                             .font(.title)
@@ -81,26 +103,26 @@ struct ContentView: View {
                     }
                 }
             }
-        }else if screenMode == "normalMode"{
+        }else if screenMode == .normalFirst || screenMode == .normalSecond{
             VStack{
-                if cpuHand == 0{
+                if screenMode == .normalFirst{
                     Text("Choose Your Hand")
                         .font(.largeTitle)
                         .bold()
                         .padding()
-                }else if (playerHand == 1 && cpuHand == 3)||(playerHand == 2 && cpuHand == 1)||(playerHand == 3 && cpuHand == 2){
+                }else if screenMode == .normalSecond && ((playerHand == .rock && cpuHand == .scissors)||(playerHand == .paper && cpuHand == .rock)||(playerHand == .scissors && cpuHand == .paper)){
                     Text("WON!")
                         .font(.largeTitle)
                         .bold()
                         .foregroundColor(.green)
                         .padding()
-                }else if (playerHand == 1 && cpuHand == 2)||(playerHand == 2 && cpuHand == 3)||(playerHand == 3 && cpuHand == 1){
+                }else if screenMode == .normalSecond && ((playerHand == .rock && cpuHand == .paper)||(playerHand == .paper && cpuHand == .scissors)||(playerHand == .scissors && cpuHand == .rock)){
                                 Text("LOSE")
                                     .font(.largeTitle)
                                     .bold()
                                     .foregroundColor(.blue)
                                     .padding()
-                }else if playerHand == cpuHand{
+                }else if screenMode == .normalSecond && playerHand == cpuHand{
                     Text("DRAW")
                         .font(.largeTitle)
                         .bold()
@@ -116,20 +138,20 @@ struct ContentView: View {
                         .opacity(0.2)
                         .padding()
                     
-                    if cpuHand == 0{
+                    if screenMode == .normalFirst{
                         
-                    }else if cpuHand == 1{
+                    }else if screenMode == .normalSecond && cpuHand == .rock{
                         Image("rock")
                             .resizable()
                             .frame(width: 200, height: 200)
                             .padding()
                         
-                    }else if cpuHand == 2{
+                    }else if screenMode == .normalSecond && cpuHand == .paper{
                         Image("paper")
                             .resizable()
                             .frame(width: 200, height: 200)
                             .padding()
-                    }else if cpuHand == 3{
+                    }else if screenMode == .normalSecond && cpuHand == .scissors{
                         Image("scissors")
                             .resizable()
                             .frame(width: 200, height: 200)
@@ -140,8 +162,9 @@ struct ContentView: View {
                 
                 HStack{
                     Button{
-                        playerHand = 1
-                        cpuHand = Int.random(in: 1...3)
+                        playerHand = .rock
+                        screenMode = .normalSecond
+                        cpuHand = RPSHand.allCases.randomElement()!
                     }label:{
                         Image("rock")
                             .resizable()
@@ -152,8 +175,8 @@ struct ContentView: View {
                     }
                     
                     Button{
-                        playerHand = 2
-                        cpuHand = Int.random(in: 1...3)
+                        playerHand = .paper
+                        cpuHand = RPSHand.allCases.randomElement()!
                     } label:{
                         Image("paper")
                             .resizable()
@@ -164,8 +187,8 @@ struct ContentView: View {
                     }
                     
                     Button{
-                        playerHand = 3
-                        cpuHand = Int.random(in: 1...3)
+                        playerHand = .scissors
+                        cpuHand = RPSHand.allCases.randomElement()!
                     } label:{
                         Image("scissors")
                             .resizable()
@@ -177,9 +200,9 @@ struct ContentView: View {
                 }.padding(50)
                     
                     Button{
-                        screenMode = "title"
-                        playerHand = 0
-                        cpuHand = 0
+                        screenMode = .title
+                        playerHand = .rock
+                        cpuHand = .rock
                     } label: {
                         Text("Return to the Title")
                             .font(.title)
@@ -192,7 +215,7 @@ struct ContentView: View {
                     }
                 
             }
-        }else if screenMode == "brainTraining"{
+        }else if screenMode == .brainTraining{
             VStack{
                 HStack{
                     Text("Time")
@@ -208,7 +231,7 @@ struct ContentView: View {
                             .onReceive(timer) { _ in
                                 elapsedTime += 0.01 //default 0.01
                                 if elapsedTime >= timeLimit{
-                                    screenMode = "finished"
+                                    screenMode = .finished
                                     elapsedTime = 0
                                 }
                             }
@@ -220,32 +243,32 @@ struct ContentView: View {
                     .font(.title)
                     .padding()
                 
-                if instruction == 1{
+                if instruction == .win{
                     Text("Win")
                         .font(.largeTitle)
                         .bold()
-                }else if instruction == 2{
+                }else if instruction == .lose{
                     Text("Lose")
                         .font(.largeTitle)
                         .bold()
-                }else if instruction == 3{
+                }else if instruction == .draw{
                     Text("Draw")
                         .font(.largeTitle)
                         .bold()
                 }
                 
-                if cpuHand == 1{
+                if cpuHand == .rock{
                     Image("rock")
                         .resizable()
                         .frame(width: 200, height: 200)
                         .padding()
                     
-                }else if cpuHand == 2{
+                }else if cpuHand == .paper{
                     Image("paper")
                         .resizable()
                         .frame(width: 200, height: 200)
                         .padding()
-                }else if cpuHand == 3{
+                }else if cpuHand == .scissors{
                     Image("scissors")
                         .resizable()
                         .frame(width: 200, height: 200)
@@ -254,7 +277,7 @@ struct ContentView: View {
                 
                 HStack{
                     Button{
-                        playerHand = 1
+                        playerHand = .rock
                         if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
                             playSound(named: "correct")
                             score += 1
@@ -262,8 +285,8 @@ struct ContentView: View {
                             playSound(named: "wrong")
                             score -= 1
                         }
-                        cpuHand = Int.random(in: 1...3)
-                        instruction = Int.random(in: 1...3)
+                        cpuHand = RPSHand.allCases.randomElement()!
+                        instruction = RPSResult.allCases.randomElement()!
                     }label:{
                         Image("rock")
                             .resizable()
@@ -274,7 +297,7 @@ struct ContentView: View {
                     }
                     
                     Button{
-                        playerHand = 2
+                        playerHand = .paper
                         if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
                             playSound(named: "correct")
                             score += 1
@@ -282,8 +305,8 @@ struct ContentView: View {
                             playSound(named: "wrong")
                             score -= 1
                         }
-                        cpuHand = Int.random(in: 1...3)
-                        instruction = Int.random(in: 1...3)
+                        cpuHand = RPSHand.allCases.randomElement()!
+                        instruction = RPSResult.allCases.randomElement()!
                     } label:{
                         Image("paper")
                             .resizable()
@@ -294,7 +317,7 @@ struct ContentView: View {
                     }
                     
                     Button{
-                        playerHand = 3
+                        playerHand = .scissors
                         if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
                             playSound(named: "correct")
                             score += 1
@@ -302,8 +325,8 @@ struct ContentView: View {
                             playSound(named: "wrong")
                             score -= 1
                         }
-                        cpuHand = Int.random(in: 1...3)
-                        instruction = Int.random(in: 1...3)
+                        cpuHand = RPSHand.allCases.randomElement()!
+                        instruction = RPSResult.allCases.randomElement()!
                     } label:{
                         Image("scissors")
                             .resizable()
@@ -315,7 +338,7 @@ struct ContentView: View {
                 }.padding(50)
             }
             
-        }else if screenMode == "finished"{
+        }else if screenMode == .finished{
             Text("Finished!")
                 .font(.largeTitle)
                 .bold()
@@ -323,12 +346,12 @@ struct ContentView: View {
                 .onReceive(timer) { _ in
                     elapsedTime += 0.01 //default 0.01
                     if elapsedTime >= 2{
-                        screenMode = "result"
+                        screenMode = .result
                         elapsedTime = 0
                     }
                 }
             
-        }else if screenMode == "result"{
+        }else if screenMode == .result{
             VStack{
                 Text("Result")
                     .font(.largeTitle)
@@ -350,14 +373,14 @@ struct ContentView: View {
                 Spacer()
                 
                 Button{
-                    screenMode = "brainTraining"
+                    screenMode = .brainTraining
                     if score > highScore{
                         highScore = score
                     }
                     elapsedTime = 0
                     score = 0
-                    instruction = Int.random(in: 1...3)
-                    cpuHand = Int.random(in: 1...3)
+                    cpuHand = RPSHand.allCases.randomElement()!
+                    instruction = RPSResult.allCases.randomElement()!
                 } label: {
                     Text("Play Again")
                         .font(.title)
@@ -370,14 +393,14 @@ struct ContentView: View {
                 }
                 
                 Button{
-                    screenMode = "title"
+                    screenMode = .title
                     if score > highScore{
                         highScore = score
                     }
                     elapsedTime = 0
                     score = 0
-                    playerHand = 0
-                    cpuHand = 0
+                    playerHand = .rock
+                    cpuHand = .rock
                 } label: {
                     Text("Return to the Title")
                         .font(.title)
@@ -395,17 +418,18 @@ struct ContentView: View {
         
     }
     
+
     //function for Judging RPS
-    //1 for rock, 2 for paper, 3 for scissors
-    func judgeRPS(player: Int, cpu: Int) -> Int {
+    func judgeRPS(player: RPSHand, cpu: RPSHand) -> RPSResult {
         if player == cpu {
-            return 3 //draw
-        }else if (player == 1 && cpu == 3) || (player == 2 && cpu == 1) || (player == 3 && cpu == 2) {
-            return 1 //win
+            return .draw
+        }else if (player == .rock && cpu == .scissors) || (player == .paper && cpu == .rock) || (player == .scissors && cpu == .paper){
+            return .win
         }else {
-            return 2 //lose
+            return .lose
         }
     }
+    
     
     func playSound(named soundName: String){
         if let soundURL = Bundle.main.url(forResource: soundName, withExtension: "mp3"){
