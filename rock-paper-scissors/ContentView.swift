@@ -22,13 +22,13 @@ struct ContentView: View {
         case result
     }
     
-    enum RPSHand: CaseIterable {
+    enum RPSHand: String,CaseIterable {
         case rock
         case paper
         case scissors
     }
     
-    enum RPSResult: CaseIterable {
+    enum RPSResult: String,CaseIterable{
         case win
         case lose
         case draw
@@ -110,19 +110,19 @@ struct ContentView: View {
                         .font(.largeTitle)
                         .bold()
                         .padding()
-                }else if screenMode == .normalSecond && ((playerHand == .rock && cpuHand == .scissors)||(playerHand == .paper && cpuHand == .rock)||(playerHand == .scissors && cpuHand == .paper)){
+                }else if screenMode == .normalSecond && judgeRPS(player: playerHand, cpu: cpuHand) == .win{
                     Text("WON!")
                         .font(.largeTitle)
                         .bold()
                         .foregroundColor(.green)
                         .padding()
-                }else if screenMode == .normalSecond && ((playerHand == .rock && cpuHand == .paper)||(playerHand == .paper && cpuHand == .scissors)||(playerHand == .scissors && cpuHand == .rock)){
-                                Text("LOSE")
-                                    .font(.largeTitle)
-                                    .bold()
-                                    .foregroundColor(.blue)
-                                    .padding()
-                }else if screenMode == .normalSecond && playerHand == cpuHand{
+                }else if screenMode == .normalSecond && judgeRPS(player: playerHand, cpu: cpuHand) == .lose{
+                    Text("LOSE")
+                        .font(.largeTitle)
+                        .bold()
+                        .foregroundColor(.blue)
+                        .padding()
+                }else if screenMode == .normalSecond && judgeRPS(player: playerHand, cpu: cpuHand) == .draw{
                     Text("DRAW")
                         .font(.largeTitle)
                         .bold()
@@ -243,40 +243,20 @@ struct ContentView: View {
                     .font(.title)
                     .padding()
                 
-                if instruction == .win{
-                    Text("Win")
+
+                Text(instruction.rawValue)
                         .font(.largeTitle)
                         .bold()
-                }else if instruction == .lose{
-                    Text("Lose")
-                        .font(.largeTitle)
-                        .bold()
-                }else if instruction == .draw{
-                    Text("Draw")
-                        .font(.largeTitle)
-                        .bold()
-                }
+
                 
-                if cpuHand == .rock{
-                    Image("rock")
+                Image(cpuHand.rawValue)
                         .resizable()
                         .frame(width: 200, height: 200)
                         .padding()
-                    
-                }else if cpuHand == .paper{
-                    Image("paper")
-                        .resizable()
-                        .frame(width: 200, height: 200)
-                        .padding()
-                }else if cpuHand == .scissors{
-                    Image("scissors")
-                        .resizable()
-                        .frame(width: 200, height: 200)
-                        .padding()
-                }
+
                 
                 HStack{
-                    Button{
+                    makeHandButton(hand: .rock, color: .pink){
                         playerHand = .rock
                         if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
                             playSound(named: "correct")
@@ -287,16 +267,9 @@ struct ContentView: View {
                         }
                         cpuHand = RPSHand.allCases.randomElement()!
                         instruction = RPSResult.allCases.randomElement()!
-                    }label:{
-                        Image("rock")
-                            .resizable()
-                            .frame(width: 80, height: 80)
-                            .padding()
-                            .background(Color.pink)
-                            .cornerRadius(10)
                     }
                     
-                    Button{
+                    makeHandButton(hand: .paper, color: .blue){
                         playerHand = .paper
                         if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
                             playSound(named: "correct")
@@ -307,16 +280,9 @@ struct ContentView: View {
                         }
                         cpuHand = RPSHand.allCases.randomElement()!
                         instruction = RPSResult.allCases.randomElement()!
-                    } label:{
-                        Image("paper")
-                            .resizable()
-                            .frame(width: 80, height: 80)
-                            .padding()
-                            .background(Color.blue)
-                            .cornerRadius(10)
                     }
                     
-                    Button{
+                    makeHandButton(hand: .scissors, color: .yellow){
                         playerHand = .scissors
                         if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
                             playSound(named: "correct")
@@ -327,14 +293,8 @@ struct ContentView: View {
                         }
                         cpuHand = RPSHand.allCases.randomElement()!
                         instruction = RPSResult.allCases.randomElement()!
-                    } label:{
-                        Image("scissors")
-                            .resizable()
-                            .frame(width: 80, height: 80)
-                            .padding()
-                            .background(Color.yellow)
-                            .cornerRadius(10)
                     }
+                    
                 }.padding(50)
             }
             
@@ -439,6 +399,22 @@ struct ContentView: View {
             } catch {
                 print("Sound error: \(error.localizedDescription)")
             }
+        }
+    }
+    
+    func makeHandButton(
+        hand: RPSHand,
+        color: Color,
+        action: @escaping () -> Void
+    ) -> some View{
+        Button(action: action){
+            Image(hand.rawValue)
+                .resizable()
+                .frame(width: 80, height: 80)
+                .padding()
+                .background(color)
+                .cornerRadius(10)
+            
         }
     }
     
