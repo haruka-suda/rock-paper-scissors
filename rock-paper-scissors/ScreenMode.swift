@@ -5,14 +5,14 @@
 //  Created by Mac mini on 2025/05/11.
 //
 
-import SwiftUI
+import Foundation
 
-struct ScreenMode: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
+enum ScreenMode {
+    case title
+    case normalFirst
+    case normalSecond
+    case brainTraining
+    case finished
+    case result
 }
 
-#Preview {
-    ScreenMode()
-}

@@ -5,14 +5,13 @@
 //  Created by Mac mini on 2025/05/11.
 //
 
+import Foundation
 import SwiftUI
 
-struct AppState: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
 
-#Preview {
-    AppState()
+class AppState: ObservableObject {
+    @Published var timeLimit = 60.0
+    @Published var elapsedTime = 0.0
+    @Published var score = 0
+    @Published var highScore = 0
 }

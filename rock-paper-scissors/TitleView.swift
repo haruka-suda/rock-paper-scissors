@@ -8,11 +8,63 @@
 import SwiftUI
 
 struct TitleView: View {
+    @EnvironmentObject var appState: AppState
+    @Binding var instruction: RPSResult
+    @Binding var cpuHand: RPSHand
+    @Binding var screenMode: ScreenMode
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack{
+            Text("RPS Challenge")
+                .font(.largeTitle)
+                .bold()
+            Image("rock")
+                .resizable()
+                .frame(width: 150, height: 150)
+                .padding()
+            HStack{
+                Image("paper")
+                    .resizable()
+                    .frame(width: 150, height: 150)
+                    .padding()
+                Image("scissors")
+                    .resizable()
+                    .frame(width: 150, height: 150)
+                    .padding()
+            }
+            .padding()
+            
+            VStack{
+                Button{
+                    screenMode = .normalFirst
+                } label: {
+                    Text("Normal Mode")
+                        .font(.title)
+                        .bold()
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                
+                Button{
+                    screenMode = .brainTraining
+                    appState.score = 0
+                    appState.elapsedTime = 0
+                    instruction = RPSResult.allCases.randomElement()!
+                    cpuHand = RPSHand.allCases.randomElement()!
+                } label: {
+                    Text("Brain Training")
+                        .font(.title)
+                        .bold()
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.orange)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+            }
+        }
     }
-}
-
-#Preview {
-    TitleView()
 }
