@@ -5,14 +5,16 @@
 //  Created by Mac mini on 2025/05/11.
 //
 
-import SwiftUI
+import Foundation
 
-struct RPSLogic: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+
+//function for Judging RPS
+func judgeRPS(player: RPSHand, cpu: RPSHand) -> RPSResult {
+    if player == cpu {
+        return .draw
+    }else if (player == .rock && cpu == .scissors) || (player == .paper && cpu == .rock) || (player == .scissors && cpu == .paper){
+        return .win
+    }else {
+        return .lose
     }
-}
-
-#Preview {
-    RPSLogic()
 }

@@ -10,99 +10,22 @@ import SwiftUI
 import AVFoundation
 
 struct ContentView: View {
-    @State private var audioPlayer: AVAudioPlayer?
+    
     let timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
     
-    enum ScreenMode {
-        case title
-        case normalFirst
-        case normalSecond
-        case brainTraining
-        case finished
-        case result
-    }
-    
-    enum RPSHand: String,CaseIterable {
-        case rock
-        case paper
-        case scissors
-    }
-    
-    enum RPSResult: String,CaseIterable{
-        case win
-        case lose
-        case draw
-    }
-    
-    
     @State var screenMode: ScreenMode = .title
-    
-    
     @State var playerHand: RPSHand = .rock
     @State var cpuHand: RPSHand = .rock
-    @State var timeLimit = 60.0
-    @State var elapsedTime = 0.0
-    
-   
     @State var instruction: RPSResult = .win
-    @State var score = 0
-    @State var highScore = 0
+    
+    @StateObject var appState = AppState()
+
     
     var body: some View {
         
         if screenMode == .title{
-            VStack{
-                Text("RPS Challenge")
-                    .font(.largeTitle)
-                    .bold()
-                Image("rock")
-                    .resizable()
-                    .frame(width: 150, height: 150)
-                    .padding()
-                HStack{
-                    Image("paper")
-                        .resizable()
-                        .frame(width: 150, height: 150)
-                        .padding()
-                    Image("scissors")
-                        .resizable()
-                        .frame(width: 150, height: 150)
-                        .padding()
-                }
-                .padding()
-                
-                VStack{
-                    Button{
-                        screenMode = .normalFirst
-                    } label: {
-                        Text("Normal Mode")
-                            .font(.title)
-                            .bold()
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    
-                    Button{
-                        screenMode = .brainTraining
-                        score = 0
-                        elapsedTime = 0
-                        instruction = RPSResult.allCases.randomElement()!
-                        cpuHand = RPSHand.allCases.randomElement()!
-                    } label: {
-                        Text("Brain Training")
-                            .font(.title)
-                            .bold()
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.orange)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                }
-            }
+            TitleView().environmentObject(appState)
+            
         }else if screenMode == .normalFirst || screenMode == .normalSecond{
             VStack{
                 if screenMode == .normalFirst{
@@ -226,20 +149,20 @@ struct ContentView: View {
                             .frame(width: 300, height: 15)
                             .foregroundColor(.gray)
                         Rectangle()
-                            .frame(width: CGFloat((timeLimit-elapsedTime)/timeLimit)*300, height: 15)
+                            .frame(width: CGFloat((AppState.timeLimit-AppState.elapsedTime)/AppState.timeLimit)*300, height: 15)
                             .foregroundColor(.red)
                             .onReceive(timer) { _ in
-                                elapsedTime += 0.01 //default 0.01
-                                if elapsedTime >= timeLimit{
+                                AppState.elapsedTime += 0.01 //default 0.01
+                                if AppState.elapsedTime >= AppState.timeLimit{
                                     screenMode = .finished
-                                    elapsedTime = 0
+                                    AppState.elapsedTime = 0
                                 }
                             }
                     }
                     .frame(width: 300)
                 }
                 
-                Text("Score : " + String(score))
+                Text("Score : " + String(AppState.score))
                     .font(.title)
                     .padding()
                 
@@ -260,10 +183,10 @@ struct ContentView: View {
                         playerHand = .rock
                         if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
                             playSound(named: "correct")
-                            score += 1
+                            AppState.score += 1
                         }else {
                             playSound(named: "wrong")
-                            score -= 1
+                            AppState.score -= 1
                         }
                         cpuHand = RPSHand.allCases.randomElement()!
                         instruction = RPSResult.allCases.randomElement()!
@@ -273,10 +196,10 @@ struct ContentView: View {
                         playerHand = .paper
                         if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
                             playSound(named: "correct")
-                            score += 1
+                            AppState.score += 1
                         }else {
                             playSound(named: "wrong")
-                            score -= 1
+                            AppState.score -= 1
                         }
                         cpuHand = RPSHand.allCases.randomElement()!
                         instruction = RPSResult.allCases.randomElement()!
@@ -286,10 +209,10 @@ struct ContentView: View {
                         playerHand = .scissors
                         if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
                             playSound(named: "correct")
-                            score += 1
+                            AppState.score += 1
                         }else {
                             playSound(named: "wrong")
-                            score -= 1
+                            AppState.score -= 1
                         }
                         cpuHand = RPSHand.allCases.randomElement()!
                         instruction = RPSResult.allCases.randomElement()!
@@ -304,10 +227,10 @@ struct ContentView: View {
                 .bold()
                 .padding()
                 .onReceive(timer) { _ in
-                    elapsedTime += 0.01 //default 0.01
-                    if elapsedTime >= 2{
+                    AppState.elapsedTime += 0.01 //default 0.01
+                    if AppState.elapsedTime >= 2{
                         screenMode = .result
-                        elapsedTime = 0
+                        AppState.elapsedTime = 0
                     }
                 }
             
@@ -317,16 +240,16 @@ struct ContentView: View {
                     .font(.largeTitle)
                     .bold()
                     .padding()
-                Text("Your Score : \(score)")
+                Text("Your Score : \(AppState.score)")
                     .font(.title)
                     .padding()
-                if score > highScore{
+                if AppState.score > AppState.highScore{
                     Text("🎉 New High Score!")
                         .font(.title)
                         .bold()
                         .padding()
                 }else {
-                    Text("High Score : \(highScore)")
+                    Text("High Score : \(AppState.highScore)")
                         .font(.title)
                         .padding()
                 }
@@ -334,11 +257,11 @@ struct ContentView: View {
                 
                 Button{
                     screenMode = .brainTraining
-                    if score > highScore{
-                        highScore = score
+                    if AppState.score > AppState.highScore{
+                        AppState.highScore = AppState.score
                     }
-                    elapsedTime = 0
-                    score = 0
+                    AppState.elapsedTime = 0
+                    AppState.score = 0
                     cpuHand = RPSHand.allCases.randomElement()!
                     instruction = RPSResult.allCases.randomElement()!
                 } label: {
@@ -354,11 +277,11 @@ struct ContentView: View {
                 
                 Button{
                     screenMode = .title
-                    if score > highScore{
-                        highScore = score
+                    if AppState.score > AppState.highScore{
+                        AppState.highScore = AppState.score
                     }
-                    elapsedTime = 0
-                    score = 0
+                    AppState.elapsedTime = 0
+                    AppState.score = 0
                     playerHand = .rock
                     cpuHand = .rock
                 } label: {
@@ -378,29 +301,9 @@ struct ContentView: View {
         
     }
     
+    
+    
 
-    //function for Judging RPS
-    func judgeRPS(player: RPSHand, cpu: RPSHand) -> RPSResult {
-        if player == cpu {
-            return .draw
-        }else if (player == .rock && cpu == .scissors) || (player == .paper && cpu == .rock) || (player == .scissors && cpu == .paper){
-            return .win
-        }else {
-            return .lose
-        }
-    }
-    
-    
-    func playSound(named soundName: String){
-        if let soundURL = Bundle.main.url(forResource: soundName, withExtension: "mp3"){
-            do {
-                audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
-                audioPlayer?.play()
-            } catch {
-                print("Sound error: \(error.localizedDescription)")
-            }
-        }
-    }
     
     func makeHandButton(
         hand: RPSHand,
