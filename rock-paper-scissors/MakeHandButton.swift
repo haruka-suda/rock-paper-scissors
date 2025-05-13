@@ -7,12 +7,18 @@
 
 import SwiftUI
 
-struct MakeHandButton: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+func makeHandButton(
+    hand: RPSHand,
+    color: Color,
+    action: @escaping () -> Void
+) -> some View{
+    Button(action: action){
+        Image(hand.rawValue)
+            .resizable()
+            .frame(width: 80, height: 80)
+            .padding()
+            .background(color)
+            .cornerRadius(10)
+        
     }
-}
-
-#Preview {
-    MakeHandButton()
 }
