@@ -5,3 +5,30 @@
 //  Created by Mac mini on 2025/05/15.
 //
 
+"menu_title" = "じゃんけんアプリ";
+"normal_mode_button" = "ノーマルモード";
+"brain_training_button" = "脳トレモード";
+
+//Normal Mode
+"choose_your_hand" = "出す手を選んでね！";
+"normal_won" = "勝ち!";
+"normal_lose" = "負け";
+"normal_draw" = "引き分け";
+"return_to_the_title" = "タイトルへもどる";
+
+//Brain Training Mode
+"time_label" = "残り時間";
+"score_label" = "スコア : ";
+"instruction_win" = "勝て！";
+"instruction_lose" = "負けろ！";
+"instruction_draw" = "引き分け！";
+
+//Finished Screen
+"finished_label" = "終了！";
+
+//Result Screen
+"result_label" = "リザルト";
+"your_score_label" = "スコア : ";
+"notification_high_score" = "🎉 ハイスコア更新！";
+"high_score_label" = "ハイスコア : ";
+"play_again_label" = "もう一度遊ぶ";

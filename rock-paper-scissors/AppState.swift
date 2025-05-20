@@ -10,8 +10,12 @@ import SwiftUI
 
 
 class AppState: ObservableObject {
-    @Published var timeLimit = 60.0
+    @Published var timeLimit = 5.0
     @Published var elapsedTime = 0.0
     @Published var score = 0
     @Published var highScore = 0
+    
+    init() {
+        self.highScore = UserDefaults.standard.integer(forKey: "highScore")
+    }
 }

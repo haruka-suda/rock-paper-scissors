@@ -15,7 +15,7 @@ struct TitleView: View {
     
     var body: some View {
         VStack{
-            Text("RPS Challenge")
+            Text("menu_title".localized)
                 .font(.largeTitle)
                 .bold()
             Image("rock")
@@ -38,7 +38,7 @@ struct TitleView: View {
                 Button{
                     screenMode = .normalFirst
                 } label: {
-                    Text("Normal Mode")
+                    Text("normal_mode_button".localized)
                         .font(.title)
                         .bold()
                         .padding()
@@ -55,7 +55,7 @@ struct TitleView: View {
                     instruction = RPSResult.allCases.randomElement()!
                     cpuHand = RPSHand.allCases.randomElement()!
                 } label: {
-                    Text("Brain Training")
+                    Text("brain_training_button".localized)
                         .font(.title)
                         .bold()
                         .padding()

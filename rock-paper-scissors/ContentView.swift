@@ -33,80 +33,10 @@ struct ContentView: View {
             BrainTrainingView(instruction: $instruction, playerHand: $playerHand, cpuHand: $cpuHand, screenMode: $screenMode).environmentObject(appState)
             
         }else if screenMode == .finished{
-            Text("Finished!")
-                .font(.largeTitle)
-                .bold()
-                .padding()
-                .onReceive(timer) { _ in
-                    appState.elapsedTime += 0.01 //default 0.01
-                    if appState.elapsedTime >= 2{
-                        screenMode = .result
-                        appState.elapsedTime = 0
-                    }
-                }
+            FinishedView(screenMode: $screenMode).environmentObject(appState)
             
         }else if screenMode == .result{
-            VStack{
-                Text("Result")
-                    .font(.largeTitle)
-                    .bold()
-                    .padding()
-                Text("Your Score : \(appState.score)")
-                    .font(.title)
-                    .padding()
-                if appState.score > appState.highScore{
-                    Text("🎉 New High Score!")
-                        .font(.title)
-                        .bold()
-                        .padding()
-                }else {
-                    Text("High Score : \(appState.highScore)")
-                        .font(.title)
-                        .padding()
-                }
-                Spacer()
-                
-                Button{
-                    screenMode = .brainTraining
-                    if appState.score > appState.highScore{
-                        appState.highScore = appState.score
-                    }
-                    appState.elapsedTime = 0
-                    appState.score = 0
-                    cpuHand = RPSHand.allCases.randomElement()!
-                    instruction = RPSResult.allCases.randomElement()!
-                } label: {
-                    Text("Play Again")
-                        .font(.title)
-                        .bold()
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.orange)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-                
-                Button{
-                    screenMode = .title
-                    if appState.score > appState.highScore{
-                        appState.highScore = appState.score
-                    }
-                    appState.elapsedTime = 0
-                    appState.score = 0
-                    playerHand = .rock
-                    cpuHand = .rock
-                } label: {
-                    Text("Return to the Title")
-                        .font(.title)
-                        .bold()
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-                
-            }
+            ResultView(instruction: $instruction, playerHand: $playerHand, cpuHand: $cpuHand, screenMode: $screenMode).environmentObject(appState)
         }
         
         
@@ -120,6 +50,17 @@ struct ContentView: View {
     
 }
 
-#Preview {
+#Preview("English") {
     ContentView()
+        .environment(\.locale, .init(identifier: "en"))
+}
+
+#Preview("Japanese") {
+    ContentView()
+        .environment(\.locale, .init(identifier: "ja"))
+}
+
+#Preview("French") {
+    ContentView()
+        .environment(\.locale, .init(identifier: "fr"))
 }

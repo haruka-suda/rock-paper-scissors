@@ -5,3 +5,36 @@
 //  Created by Mac mini on 2025/05/15.
 //
 
+//Title Screen
+"menu_title" = "RPS Challenge";
+"normal_mode_button" = "Normal Mode";
+"brain_training_button" = "Brain Training";
+
+//Normal Mode
+"choose_your_hand" = "Choose Your Hand";
+"normal_won" = "WON!";
+"normal_lose" = "LOSE";
+"normal_draw" = "DRAW";
+"return_to_the_title" = "Return to the Title";
+
+//Brain Training Mode
+"time_label" = "Time";
+"score_label" = "Score : ";
+"instruction_win" = "Win";
+"instruction_lose" = "Lose";
+"instruction_draw" = "Draw";
+
+//Finished Screen
+"finished_label" = "Finished!";
+
+//Result Screen
+"result_label" = "Result";
+"your_score_label" = "Your Score : ";
+"notification_high_score" = "🎉 New High Score!";
+"high_score_label" = "High Score : ";
+"play_again_label" = "Play Again";
+
+
+
+
+
