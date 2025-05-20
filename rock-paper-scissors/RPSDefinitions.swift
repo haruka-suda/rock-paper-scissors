@@ -18,3 +18,13 @@ enum RPSResult: String,CaseIterable{
     case lose
     case draw
 }
+
+extension RPSResult{
+    var localizedText: String {
+        switch self {
+        case .win: return "instruction_win".localized
+        case .lose: return "instruction_lose".localized
+        case .draw: return "instruction_draw".localized
+        }
+    }
+}

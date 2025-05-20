@@ -5,3 +5,31 @@
 //  Created by Mac mini on 2025/05/15.
 //
 
+//Title Screen
+"menu_title" = "Défi Pierre-Feuille-Ciseaux";
+"normal_mode_button" = "Mode Normal";
+"brain_training_button" = "Entraînement Cérébral";
+
+//Normal Mode
+"choose_your_hand" = "Choisissez votre main";
+"normal_won" = "GAGNÉ !";
+"normal_lose" = "PERDU";
+"normal_draw" = "ÉGALITÉ";
+"return_to_the_title" = "Retour au menu";
+
+//Brain Training Mode
+"time_label" = "Temps";
+"score_label" = "Score : ";
+"instruction_win" = "Gagnez";
+"instruction_lose" = "Perdez";
+"instruction_draw" = "Égalité";
+
+//Finished Screen
+"finished_label" = "Terminé !";
+
+//Result Screen
+"result_label" = "Résultat";
+"your_score_label" = "Votre score : ";
+"notification_high_score" = "🎉 Nouveau record !";
+"high_score_label" = "Meilleur score : ";
+"play_again_label" = "Rejouer";

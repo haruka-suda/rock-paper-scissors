@@ -17,24 +17,24 @@ struct NormalModeView: View {
     var body: some View {
         VStack{
             if screenMode == .normalFirst{
-                Text("Choose Your Hand")
+                Text("choose_your_hand".localized)
                     .font(.largeTitle)
                     .bold()
                     .padding()
             }else if screenMode == .normalSecond && judgeRPS(player: playerHand, cpu: cpuHand) == .win{
-                Text("WON!")
+                Text("normal_won".localized)
                     .font(.largeTitle)
                     .bold()
                     .foregroundColor(.green)
                     .padding()
             }else if screenMode == .normalSecond && judgeRPS(player: playerHand, cpu: cpuHand) == .lose{
-                Text("LOSE")
+                Text("normal_lose".localized)
                     .font(.largeTitle)
                     .bold()
                     .foregroundColor(.blue)
                     .padding()
             }else if screenMode == .normalSecond && judgeRPS(player: playerHand, cpu: cpuHand) == .draw{
-                Text("DRAW")
+                Text("normal_draw".localized)
                     .font(.largeTitle)
                     .bold()
                     .foregroundColor(.gray)
@@ -115,7 +115,7 @@ struct NormalModeView: View {
                     playerHand = .rock
                     cpuHand = .rock
                 } label: {
-                    Text("Return to the Title")
+                    Text("return_to_the_title".localized)
                         .font(.title)
                         .bold()
                         .padding()

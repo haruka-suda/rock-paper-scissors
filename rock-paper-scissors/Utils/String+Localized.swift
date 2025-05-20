@@ -5,14 +5,10 @@
 //  Created by Mac mini on 2025/05/16.
 //
 
-import SwiftUI
+import Foundation
 
-struct String_Localized: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+extension String {
+    var localized: String {
+        NSLocalizedString(self, comment: "")
     }
-}
-
-#Preview {
-    String_Localized()
 }

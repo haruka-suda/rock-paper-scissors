@@ -21,7 +21,7 @@ struct BrainTrainingView: View {
     var body: some View {
         VStack{
             HStack{
-                Text("Time")
+                Text("time_label".localized)
                     .font(.title)
                     .bold()
                 ZStack(alignment: .leading){
@@ -42,12 +42,12 @@ struct BrainTrainingView: View {
                 .frame(width: 300)
             }
             
-            Text("Score : " + String(appState.score))
+            Text("score_label".localized + String(appState.score))
                 .font(.title)
                 .padding()
             
             
-            Text(instruction.rawValue)
+            Text(instruction.localizedText)
                 .font(.largeTitle)
                 .bold()
             
