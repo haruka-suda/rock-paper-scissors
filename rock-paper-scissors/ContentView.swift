@@ -37,6 +37,8 @@ struct ContentView: View {
             
         }else if screenMode == .result{
             ResultView(instruction: $instruction, playerHand: $playerHand, cpuHand: $cpuHand, screenMode: $screenMode).environmentObject(appState)
+        }else if screenMode == .calendar{
+            CalendarView()
         }
         
         

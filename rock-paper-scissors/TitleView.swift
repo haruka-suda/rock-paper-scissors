@@ -64,6 +64,18 @@ struct TitleView: View {
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
+                Button{
+                    screenMode = .calendar
+                } label: {
+                    Text("calendar")
+                        .font(.title)
+                        .bold()
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
             }
         }
     }

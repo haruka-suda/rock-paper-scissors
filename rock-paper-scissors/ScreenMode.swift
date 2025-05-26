@@ -14,5 +14,6 @@ enum ScreenMode {
     case brainTraining
     case finished
     case result
+    case calendar
 }
 
