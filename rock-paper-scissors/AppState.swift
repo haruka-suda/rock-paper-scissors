@@ -14,8 +14,14 @@ class AppState: ObservableObject {
     @Published var elapsedTime = 0.0
     @Published var score = 0
     @Published var highScore = 0
+    @Published var highScoreHistory: [String: Int] = [:]
+    @Published var chartData: [DailyHighScore] = []
     
     init() {
         self.highScore = UserDefaults.standard.integer(forKey: "highScore")
+        
+        if let saved = UserDefaults.standard.dictionary(forKey: "highScoreHistory") as? [String: Int] {
+            self.highScoreHistory = saved
+        }
     }
 }
