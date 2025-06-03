@@ -76,6 +76,31 @@ struct TitleView: View {
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
+                Button{
+                    appState.chartData = convertToChartData(from: appState.highScoreHistory)
+                    screenMode = .lineGraph
+                } label: {
+                    Text("line graph")
+                        .font(.title)
+                        .bold()
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                Button{
+                    screenMode = .debug
+                } label: {
+                    Text("Debug Mode")
+                        .font(.title)
+                        .bold()
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
             }
         }
     }

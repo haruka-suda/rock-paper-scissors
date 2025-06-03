@@ -15,5 +15,7 @@ enum ScreenMode {
     case finished
     case result
     case calendar
+    case lineGraph
+    case debug
 }
 

@@ -39,6 +39,10 @@ struct ContentView: View {
             ResultView(instruction: $instruction, playerHand: $playerHand, cpuHand: $cpuHand, screenMode: $screenMode).environmentObject(appState)
         }else if screenMode == .calendar{
             CalendarView()
+        }else if screenMode == .lineGraph{
+            LineGraphView(screenMode: $screenMode).environmentObject(appState)
+        }else if screenMode == .debug{
+            DebugModeView(screenMode: $screenMode).environmentObject(appState)
         }
         
         
