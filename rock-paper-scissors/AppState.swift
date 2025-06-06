@@ -24,4 +24,10 @@ class AppState: ObservableObject {
             self.highScoreHistory = saved
         }
     }
+    
+    func updateChartData(){
+        self.chartData = convertToChartData(from: self.highScoreHistory)
+    }
 }
+
+

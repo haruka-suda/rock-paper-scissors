@@ -14,13 +14,39 @@ struct LineGraphView: View {
     
     var body: some View {
         VStack{
+            Text("High Score History")
+                .font(.title)
+                .fontWeight(.bold)
+                
+            
             Chart(appState.chartData) { item in
                 LineMark(
                     x: .value("Date", item.date),
                     y: .value("High Score", item.highScore)
                 )
+                .lineStyle(StrokeStyle(lineWidth: 5))
+                .foregroundStyle(.orange)
+                .interpolationMethod(.cardinal)
             }
-            .frame(height: 200)
+            .chartXAxis{
+                AxisMarks(preset: .aligned, position: .bottom){ value in
+                    AxisGridLine()
+                    AxisTick()
+                    AxisValueLabel()
+                        .font(.system(size:18, weight: .bold))
+                        .foregroundStyle(.black)
+                }
+            }
+            .chartYAxis{
+                AxisMarks(position: .leading){ value in
+                    AxisGridLine()
+                    AxisTick()
+                    AxisValueLabel()
+                        .font(.system(size:18, weight: .bold))
+                        .foregroundStyle(.black)
+                }
+            }
+            .frame(height: 400)
             .padding()
             
 
