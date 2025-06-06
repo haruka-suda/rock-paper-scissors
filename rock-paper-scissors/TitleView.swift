@@ -77,7 +77,7 @@ struct TitleView: View {
                         .cornerRadius(10)
                 }
                 Button{
-                    appState.chartData = convertToChartData(from: appState.highScoreHistory)
+                    appState.updateChartData()
                     screenMode = .lineGraph
                 } label: {
                     Text("line graph")

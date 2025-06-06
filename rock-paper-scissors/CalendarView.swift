@@ -9,20 +9,45 @@ import SwiftUI
 import Foundation
 
 struct CalendarView: View {
+    @State private var displayedDate = Date()
+    
     let now = Date()
-
-
-    
     let calendar = Calendar.current
-    let components = DateComponents(year: 2025, month: 5, day: 1)
-
     
-    var date: Date {
-        calendar.date(from: components)!
+    var displayedYear: Int {
+        calendar.component(.year, from: displayedDate)
     }
-    var weekday: Int{
-        calendar.component(.weekday, from: date)
+    var displayedMonth: Int {
+        calendar.component(.month, from: displayedDate)
     }
+    var displayedComponents: DateComponents {
+        DateComponents(year: displayedYear, month: displayedMonth, day: 1)
+    }
+    var firstWeekday: Int? {
+        if let date = calendar.date(from: displayedComponents){
+            return calendar.component(.weekday, from:date)
+        }else {
+            return nil
+        }
+    }
+    
+    var currentYear: Int {
+        calendar.component(.year, from: now)
+    }
+    var currentMonth: Int {
+        calendar.component(.month, from: now)
+    }
+    
+    
+//    let components = DateComponents(year: 2025, month: 6, day: 1)
+//
+//    
+//    var date: Date {
+//        calendar.date(from: components)!
+//    }
+//    var startWeekday: Int{
+//        calendar.component(.weekday, from: date)
+//    }
     var monthFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.locale = Locale.current
@@ -33,7 +58,7 @@ struct CalendarView: View {
     let columns: [GridItem] = Array(repeating: GridItem(.flexible()), count: 7)
     
     var body: some View {
-
+        
         let todayComponents = calendar.dateComponents([.year, .month, .day, .weekday], from: now)
        
         
@@ -41,25 +66,25 @@ struct CalendarView: View {
         VStack{
             HStack{
                 Button{
-                    
+                    displayedDate = Calendar.current.date(byAdding: .month, value: -1, to: displayedDate)!
                 } label: {
-                    Image(systemName: "arrowshape.left")
+                    Image(systemName: "arrow.left.circle.fill")
                         .font(.title)
                 }.padding()
                 
-                if let year = todayComponents.year{
+                if let year = displayedComponents.year{
                     Text(String(describing: year))
                         .font(.title)
                        
                 }
-                let monthName = monthFormatter.string(from: now)
+                let monthName = monthFormatter.string(from: displayedDate)
                 Text(monthName)
                     .font(.title)
                 
                 Button{
-                    
+                    displayedDate = Calendar.current.date(byAdding: .month, value: 1, to: displayedDate)!
                 } label: {
-                    Image(systemName: "arrowshape.right")
+                    Image(systemName: "arrow.right.circle.fill")
                         .font(.title)
                 }.padding()
                  
@@ -78,8 +103,8 @@ struct CalendarView: View {
                 }
                 
                 // Insert empty grids for offset (only if needed)
-                if weekday > 1 {
-                    ForEach(0..<(weekday-1), id: \.self){ index in
+                if firstWeekday! > 1 {
+                    ForEach(0..<(firstWeekday!-1), id: \.self){ index in
                         Text("")
                             .id("empty-\(index)")
                             .frame(width: 40, height: 40)
@@ -90,7 +115,7 @@ struct CalendarView: View {
                 
                 //Date label(1...31)
                 ForEach(1...31, id: \.self) { day in
-                    if day == todayComponents.day! {
+                    if day == todayComponents.day! && displayedMonth == currentMonth {
                         Text("\(day)")
                             .frame(width: 40, height: 40)
                             .background(Color.red.opacity(0.6))
