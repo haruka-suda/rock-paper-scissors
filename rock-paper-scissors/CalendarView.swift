@@ -9,6 +9,8 @@ import SwiftUI
 import Foundation
 
 struct CalendarView: View {
+    @EnvironmentObject var appState: AppState
+    //@Binding var screenMode: ScreenMode
     @State private var displayedDate = Date()
     
     let now = Date()
@@ -29,6 +31,9 @@ struct CalendarView: View {
         }else {
             return nil
         }
+    }
+    var days: Int? {
+        numberOfDays(in: displayedYear, month: displayedMonth)
     }
     
     var currentYear: Int {
@@ -114,17 +119,31 @@ struct CalendarView: View {
                 }
                 
                 //Date label(1...31)
-                ForEach(1...31, id: \.self) { day in
+                ForEach(1...days!, id: \.self) { day in
                     if day == todayComponents.day! && displayedMonth == currentMonth {
                         Text("\(day)")
                             .frame(width: 40, height: 40)
                             .background(Color.red.opacity(0.6))
                             .clipShape(Circle())
                     }else{
-                        Text("\(day)")
-                            .frame(width: 40, height: 40)
-                            .background(Color.gray.opacity(0.2))
-                            .clipShape(Circle())
+                        let tag = makeTagString(year: displayedYear, month: displayedMonth, day: day)
+                        if appState.highScoreHistory.keys.contains(tag){
+                            ZStack{
+                                Image(systemName: "star.fill")
+                                    .font(.title)
+                                    .foregroundStyle(.yellow)
+                                
+                                Text("\(day)")
+                                    .frame(width: 40, height: 40)
+                                    .background(Color.blue.opacity(0))
+                                    .clipShape(Circle())
+                            }
+                        }else{
+                            Text("\(day)")
+                                .frame(width: 40, height: 40)
+                                .background(Color.gray.opacity(0.2))
+                                .clipShape(Circle())
+                        }
                     }
                 }
             }
@@ -133,5 +152,5 @@ struct CalendarView: View {
 }
 
 #Preview {
-    CalendarView()
+    CalendarView().environmentObject(AppState())
 }
