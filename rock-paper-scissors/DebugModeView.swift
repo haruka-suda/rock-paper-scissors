@@ -25,14 +25,16 @@ struct DebugModeView: View {
             appState.highScoreHistory["20250509"] = 40
             appState.highScoreHistory["20250510"] = 30
             UserDefaults.standard.set(appState.highScoreHistory, forKey: "highScoreHistory")
+            
+            appState.updateChartData()
         }label:{
             Text("set 10 days score history data")
         }
         
-        Button{
-            screenMode = .title
-        }label:{
-            Text("return to the title")
-        }
+//        Button{
+//            screenMode = .title
+//        }label:{
+//            Text("return to the title")
+//        }
     }
 }
