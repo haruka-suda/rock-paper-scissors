@@ -12,7 +12,6 @@ import AVFoundation
 struct ContentView: View {
     
     let timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
-    @State private var isInGame = false
     @State private var selectedTab: ScreenMode = .title
     @State var screenMode: ScreenMode = .title
     @State var playerHand: RPSHand = .rock
@@ -24,8 +23,14 @@ struct ContentView: View {
     
     var body: some View {
         //don't display Tabs during the game
-        if isInGame {
-            BrainTrainingView(instruction: $instruction, playerHand: $playerHand, cpuHand: $cpuHand, screenMode: $screenMode).environmentObject(appState)
+        if appState.isInGame {
+            if screenMode == .brainTraining {
+                BrainTrainingView(instruction: $instruction, playerHand: $playerHand, cpuHand: $cpuHand, screenMode: $screenMode).environmentObject(appState)
+            }else if screenMode == .finished {
+                FinishedView(screenMode: $screenMode).environmentObject(appState)
+            }else if screenMode == .result {
+                ResultView(instruction: $instruction, playerHand: $playerHand, cpuHand: $cpuHand, screenMode: $screenMode).environmentObject(appState)
+            }
         }else {
             TabView(selection: $selectedTab){
                 TitleView(instruction: $instruction, cpuHand: $cpuHand, screenMode: $screenMode)

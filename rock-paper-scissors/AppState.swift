@@ -10,6 +10,7 @@ import SwiftUI
 
 
 class AppState: ObservableObject {
+    @Published var isInGame = false
     @Published var timeLimit = 5.0
     @Published var elapsedTime = 0.0
     @Published var score = 0

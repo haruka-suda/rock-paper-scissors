@@ -23,16 +23,21 @@ struct ResultView: View {
             Text("your_score_label".localized + "\(appState.score)")
                 .font(.title)
                 .padding()
-            if appState.score > appState.highScore{
-                Text("notification_high_score".localized)
-                    .font(.title)
-                    .bold()
-                    .padding()
-            }else {
-                Text("high_score_label".localized + "\(appState.highScore)")
-                    .font(.title)
-                    .padding()
-            }
+            
+            
+            
+            
+//            
+//            if appState.score > appState.highScore{
+//                Text("notification_high_score".localized)
+//                    .font(.title)
+//                    .bold()
+//                    .padding()
+//            }else {
+//                Text("high_score_label".localized + "\(appState.highScore)")
+//                    .font(.title)
+//                    .padding()
+//            }
             Spacer()
             
             Button{
@@ -57,7 +62,7 @@ struct ResultView: View {
             }
             
             Button{
-                screenMode = .title
+                appState.isInGame = false
                 if appState.score > appState.highScore{
                     appState.highScore = appState.score
                     UserDefaults.standard.set(appState.highScore, forKey: "highScore")

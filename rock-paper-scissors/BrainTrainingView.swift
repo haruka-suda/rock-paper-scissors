@@ -34,6 +34,20 @@ struct BrainTrainingView: View {
                         .onReceive(timer) { _ in
                             appState.elapsedTime += 0.01 //default 0.01
                             if appState.elapsedTime >= appState.timeLimit{
+                                
+                                // record today's highscore
+                                if appState.highScoreHistory[Date().yyyymmddTag] == nil {
+                                    appState.highScoreHistory[Date().yyyymmddTag] = appState.score
+                                }
+                                if let todaysHighScore = appState.highScoreHistory[Date().yyyymmddTag]{
+                                    if appState.score > todaysHighScore{
+                                        appState.highScoreHistory[Date().yyyymmddTag] = appState.score
+                                    }
+                                }
+                                
+                                // save high score
+                                UserDefaults.standard.set(appState.highScoreHistory, forKey: "highScoreHistory")
+                                
                                 screenMode = .finished
                                 appState.elapsedTime = 0
                             }

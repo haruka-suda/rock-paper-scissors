@@ -121,10 +121,21 @@ struct CalendarView: View {
                 //Date label(1...31)
                 ForEach(1...days!, id: \.self) { day in
                     if day == todayComponents.day! && displayedMonth == currentMonth {
-                        Text("\(day)")
-                            .frame(width: 40, height: 40)
-                            .background(Color.red.opacity(0.6))
-                            .clipShape(Circle())
+                        
+                        ZStack {
+                            let tag = makeTagString(year: displayedYear, month: displayedMonth, day: day)
+                            if appState.highScoreHistory.keys.contains(tag){
+                              
+                                    Image(systemName: "star.fill")
+                                        .font(.title)
+                                        .foregroundStyle(.yellow)
+                            }
+                            
+                            Text("\(day)")
+                                .frame(width: 40, height: 40)
+                                .background(Color.red.opacity(0.4))
+                                .clipShape(Circle())
+                        }
                     }else{
                         let tag = makeTagString(year: displayedYear, month: displayedMonth, day: day)
                         if appState.highScoreHistory.keys.contains(tag){
