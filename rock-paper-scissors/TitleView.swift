@@ -49,6 +49,7 @@ struct TitleView: View {
                 }
                 
                 Button{
+                    appState.isInGame = true
                     screenMode = .brainTraining
                     appState.score = 0
                     appState.elapsedTime = 0
