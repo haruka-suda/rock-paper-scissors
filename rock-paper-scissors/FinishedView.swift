@@ -17,6 +17,7 @@ struct FinishedView: View {
         Text("finished_label".localized)
             .font(.largeTitle)
             .bold()
+            .foregroundColor(Color("primaryBlue"))
             .padding()
             .onReceive(timer) { _ in
                 appState.elapsedTime += 0.01 //default 0.01

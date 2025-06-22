@@ -18,7 +18,8 @@ func makeHandButton(
             .frame(width: 80, height: 80)
             .padding()
             .background(color)
-            .cornerRadius(10)
+            .cornerRadius(20)
+            .shadow(color: Color.gray.opacity(0.8), radius: 1, x: 0, y: 8)
         
     }
 }

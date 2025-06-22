@@ -10,6 +10,12 @@ import SwiftUI
 import AVFoundation
 
 struct ContentView: View {
+    // set color for unselected tab
+    init() {
+        UITabBar.appearance().unselectedItemTintColor = UIColor(named: "tabUnselected")
+    }
+    
+    
     
     let timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
     @State private var selectedTab: ScreenMode = .title
@@ -65,6 +71,7 @@ struct ContentView: View {
                     }
                     .tag(ScreenMode.debug)
             }
+            .accentColor(Color("tabAccent"))
         }
     }
 }

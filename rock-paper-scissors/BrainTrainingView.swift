@@ -19,100 +19,109 @@ struct BrainTrainingView: View {
 
     
     var body: some View {
-        VStack{
-            HStack{
-                Text("time_label".localized)
-                    .font(.title)
-                    .bold()
-                ZStack(alignment: .leading){
-                    Rectangle()
-                        .frame(width: 300, height: 15)
-                        .foregroundColor(.gray)
-                    Rectangle()
-                        .frame(width: CGFloat((appState.timeLimit-appState.elapsedTime)/appState.timeLimit)*300, height: 15)
-                        .foregroundColor(.red)
-                        .onReceive(timer) { _ in
-                            appState.elapsedTime += 0.01 //default 0.01
-                            if appState.elapsedTime >= appState.timeLimit{
-                                
-                                // record today's highscore
-                                if appState.highScoreHistory[Date().yyyymmddTag] == nil {
-                                    appState.highScoreHistory[Date().yyyymmddTag] = appState.score
-                                }
-                                if let todaysHighScore = appState.highScoreHistory[Date().yyyymmddTag]{
-                                    if appState.score > todaysHighScore{
+        ZStack{
+            Color("primaryBlue")
+                .ignoresSafeArea()
+            
+            VStack{
+                HStack{
+                    Text("time_label".localized)
+                        .font(.title)
+                        .bold()
+                        .foregroundColor(Color("textWhite"))
+                    ZStack(alignment: .leading){
+                        Rectangle()
+                            .frame(width: 300, height: 15)
+                            .foregroundColor(.gray)
+                        Rectangle()
+                            .frame(width: CGFloat((appState.timeLimit-appState.elapsedTime)/appState.timeLimit)*300, height: 15)
+                            .foregroundColor(Color("timeBar"))
+                            .onReceive(timer) { _ in
+                                appState.elapsedTime += 0.01 //default 0.01
+                                if appState.elapsedTime >= appState.timeLimit{
+                                    
+                                    // record today's highscore
+                                    if appState.highScoreHistory[Date().yyyymmddTag] == nil {
                                         appState.highScoreHistory[Date().yyyymmddTag] = appState.score
                                     }
+                                    if let todaysHighScore = appState.highScoreHistory[Date().yyyymmddTag]{
+                                        if appState.score > todaysHighScore{
+                                            appState.highScoreHistory[Date().yyyymmddTag] = appState.score
+                                        }
+                                    }
+                                    
+                                    // save high score
+                                    UserDefaults.standard.set(appState.highScoreHistory, forKey: "highScoreHistory")
+                                    //appState.updateChartData()
+                                    
+                                    screenMode = .finished
+                                    appState.elapsedTime = 0
                                 }
-                                
-                                // save high score
-                                UserDefaults.standard.set(appState.highScoreHistory, forKey: "highScoreHistory")
-                                
-                                screenMode = .finished
-                                appState.elapsedTime = 0
                             }
+                    }
+                    .frame(width: 300)
+                }
+                
+                Text("score_label".localized + String(appState.score))
+                    .font(.title)
+                    .padding()
+                    .foregroundColor(Color("textWhite"))
+                
+                
+                Text(instruction.localizedText)
+                    .font(.largeTitle)
+                    .bold()
+                    .foregroundColor(Color("textWhite"))
+                
+                
+                Image(cpuHand.rawValue)
+                    .resizable()
+                    .frame(width: 200, height: 200)
+                    .padding()
+                
+                
+                HStack{
+                    makeHandButton(hand: .rock, color: Color("rockButton")){
+                        playerHand = .rock
+                        if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
+                            playSound(named: "correct")
+                            appState.score += 1
+                        }else {
+                            playSound(named: "wrong")
+                            appState.score -= 3
                         }
-                }
-                .frame(width: 300)
+                        cpuHand = RPSHand.allCases.randomElement()!
+                        instruction = RPSResult.allCases.randomElement()!
+                    }
+                    
+                    makeHandButton(hand: .paper, color: Color("paperButton")){
+                        playerHand = .paper
+                        if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
+                            playSound(named: "correct")
+                            appState.score += 1
+                        }else {
+                            playSound(named: "wrong")
+                            appState.score -= 3
+                        }
+                        cpuHand = RPSHand.allCases.randomElement()!
+                        instruction = RPSResult.allCases.randomElement()!
+                    }
+                    
+                    makeHandButton(hand: .scissors, color: Color("scissorsButton")){
+                        playerHand = .scissors
+                        if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
+                            playSound(named: "correct")
+                            appState.score += 1
+                        }else {
+                            playSound(named: "wrong")
+                            appState.score -= 3
+                        }
+                        cpuHand = RPSHand.allCases.randomElement()!
+                        instruction = RPSResult.allCases.randomElement()!
+                    }
+                    
+                }.padding(50)
             }
-            
-            Text("score_label".localized + String(appState.score))
-                .font(.title)
-                .padding()
-            
-            
-            Text(instruction.localizedText)
-                .font(.largeTitle)
-                .bold()
-            
-            
-            Image(cpuHand.rawValue)
-                .resizable()
-                .frame(width: 200, height: 200)
-                .padding()
-            
-            
-            HStack{
-                makeHandButton(hand: .rock, color: .pink){
-                    playerHand = .rock
-                    if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
-                        playSound(named: "correct")
-                        appState.score += 1
-                    }else {
-                        playSound(named: "wrong")
-                        appState.score -= 1
-                    }
-                    cpuHand = RPSHand.allCases.randomElement()!
-                    instruction = RPSResult.allCases.randomElement()!
-                }
-                
-                makeHandButton(hand: .paper, color: .blue){
-                    playerHand = .paper
-                    if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
-                        playSound(named: "correct")
-                        appState.score += 1
-                    }else {
-                        playSound(named: "wrong")
-                        appState.score -= 1
-                    }
-                    cpuHand = RPSHand.allCases.randomElement()!
-                    instruction = RPSResult.allCases.randomElement()!
-                }
-                
-                makeHandButton(hand: .scissors, color: .yellow){
-                    playerHand = .scissors
-                    if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
-                        playSound(named: "correct")
-                        appState.score += 1
-                    }else {
-                        playSound(named: "wrong")
-                        appState.score -= 1
-                    }
-                    cpuHand = RPSHand.allCases.randomElement()!
-                    instruction = RPSResult.allCases.randomElement()!
-                }
-                
-            }.padding(50)
         }
     }
 }

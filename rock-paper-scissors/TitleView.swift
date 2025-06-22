@@ -14,10 +14,14 @@ struct TitleView: View {
     @Binding var screenMode: ScreenMode
     
     var body: some View {
+        ZStack{
+            Color("primaryBlue")
+                .ignoresSafeArea()
         VStack{
             Text("menu_title".localized)
                 .font(.largeTitle)
-                .bold()
+                .fontWeight(.heavy)
+                .foregroundColor(.white)
             Image("rock")
                 .resizable()
                 .frame(width: 150, height: 150)
@@ -34,73 +38,77 @@ struct TitleView: View {
             }
             .padding()
             
-            VStack{
-                Button{
-                    screenMode = .normalFirst
-                } label: {
-                    Text("normal_mode_button".localized)
-                        .font(.title)
-                        .bold()
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
+            
                 
-                Button{
-                    appState.isInGame = true
-                    screenMode = .brainTraining
-                    appState.score = 0
-                    appState.elapsedTime = 0
-                    instruction = RPSResult.allCases.randomElement()!
-                    cpuHand = RPSHand.allCases.randomElement()!
-                } label: {
-                    Text("brain_training_button".localized)
-                        .font(.title)
-                        .bold()
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.orange)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-//                Button{
-//                    screenMode = .calendar
-//                } label: {
-//                    Text("calendar")
-//                        .font(.title)
-//                        .bold()
-//                        .padding()
-//                        .frame(maxWidth: .infinity)
-//                        .background(Color.blue)
-//                        .foregroundColor(.white)
-//                        .cornerRadius(10)
-//                }
-//                Button{
-//                    appState.updateChartData()
-//                    screenMode = .lineGraph
-//                } label: {
-//                    Text("line graph")
-//                        .font(.title)
-//                        .bold()
-//                        .padding()
-//                        .frame(maxWidth: .infinity)
-//                        .background(Color.blue)
-//                        .foregroundColor(.white)
-//                        .cornerRadius(10)
-//                }
-                Button{
-                    screenMode = .debug
-                } label: {
-                    Text("Debug Mode")
-                        .font(.title)
-                        .bold()
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
+                VStack{
+                    //                Button{
+                    //                    screenMode = .normalFirst
+                    //                } label: {
+                    //                    Text("normal_mode_button".localized)
+                    //                        .font(.title)
+                    //                        .bold()
+                    //                        .padding()
+                    //                        .frame(maxWidth: .infinity)
+                    //                        .background(Color.blue)
+                    //                        .foregroundColor(.white)
+                    //                        .cornerRadius(10)
+                    //                }
+                    
+                    Button{
+                        appState.isInGame = true
+                        screenMode = .brainTraining
+                        appState.score = 0
+                        appState.elapsedTime = 0
+                        instruction = RPSResult.allCases.randomElement()!
+                        cpuHand = RPSHand.allCases.randomElement()!
+                    } label: {
+                        Text("brain_training_button".localized)
+                            .font(.title)
+                            .bold()
+                            .padding()
+                            .frame(maxWidth: 350)
+                            .background(Color.white)
+                            .foregroundColor(Color("primaryBlue"))
+                            .cornerRadius(10)
+                            .shadow(color: .gray.opacity(0.8), radius: 1, x:0, y:8)
+                    }
+                    //                Button{
+                    //                    screenMode = .calendar
+                    //                } label: {
+                    //                    Text("calendar")
+                    //                        .font(.title)
+                    //                        .bold()
+                    //                        .padding()
+                    //                        .frame(maxWidth: .infinity)
+                    //                        .background(Color.blue)
+                    //                        .foregroundColor(.white)
+                    //                        .cornerRadius(10)
+                    //                }
+                    //                Button{
+                    //                    appState.updateChartData()
+                    //                    screenMode = .lineGraph
+                    //                } label: {
+                    //                    Text("line graph")
+                    //                        .font(.title)
+                    //                        .bold()
+                    //                        .padding()
+                    //                        .frame(maxWidth: .infinity)
+                    //                        .background(Color.blue)
+                    //                        .foregroundColor(.white)
+                    //                        .cornerRadius(10)
+                    //                }
+                    //                Button{
+                    //                    screenMode = .debug
+                    //                } label: {
+                    //                    Text("Debug Mode")
+                    //                        .font(.title)
+                    //                        .bold()
+                    //                        .padding()
+                    //                        .frame(maxWidth: .infinity)
+                    //                        .background(Color.blue)
+                    //                        .foregroundColor(.white)
+                    //                        .cornerRadius(10)
+                    //                }
                 }
             }
         }
