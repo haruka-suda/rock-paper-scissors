@@ -16,11 +16,18 @@ struct LineGraphView: View {
     var body: some View {
 
         
-        
-        VStack{
-            Text("High Score History")
-                .font(.title)
-                .fontWeight(.bold)
+        ZStack{
+            Color("primaryBlue")
+                .ignoresSafeArea()
+                .onAppear{
+                    appState.updateChartData()
+                }
+            
+            VStack{
+                Text("High Score History")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
                 
                 Chart(appState.chartData) { item in
                     LineMark(
@@ -28,34 +35,33 @@ struct LineGraphView: View {
                         y: .value("High Score", item.highScore)
                     )
                     .lineStyle(StrokeStyle(lineWidth: 5))
-                    .foregroundStyle(.orange)
-                    .interpolationMethod(.cardinal)
+                    .foregroundStyle(Color("timeBar"))
                 }
                 .chartXAxis{
                     AxisMarks(preset: .aligned, position: .bottom){ value in
                         AxisGridLine()
+                            .foregroundStyle(Color.white)
                         AxisTick()
+                            .foregroundStyle(Color.white)
                         AxisValueLabel()
                             .font(.system(size:18, weight: .bold))
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.white)
                     }
                 }
                 .chartYAxis{
                     AxisMarks(position: .leading){ value in
                         AxisGridLine()
+                            .foregroundStyle(Color.white)
                         AxisTick()
+                            .foregroundStyle(Color.white)
                         AxisValueLabel()
                             .font(.system(size:18, weight: .bold))
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.white)
                     }
                 }
                 .frame(height: 400)
                 .padding()
-
-            Button{
-                screenMode = .title
-            }label:{
-                Text("return to the title")
+                
             }
         }
     }

@@ -5,9 +5,9 @@
 //  Created by Mac mini on 2025/05/15.
 //
 
-"menu_title" = "じゃんけんアプリ";
+"menu_title" = "脳トレじゃんけん";
 "normal_mode_button" = "ノーマルモード";
-"brain_training_button" = "脳トレモード";
+"brain_training_button" = "ゲーム開始";
 
 //Normal Mode
 "choose_your_hand" = "出す手を選んでね！";
