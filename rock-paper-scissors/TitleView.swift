@@ -57,8 +57,10 @@ struct TitleView: View {
                     Button{
                         appState.isInGame = true
                         screenMode = .brainTraining
+                        appState.numberOfCorrectAnswers = 0
                         appState.score = 0
                         appState.elapsedTime = 0
+                        appState.remainingTime = appState.timeLimit
                         instruction = RPSResult.allCases.randomElement()!
                         cpuHand = RPSHand.allCases.randomElement()!
                     } label: {

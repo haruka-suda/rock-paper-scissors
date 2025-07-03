@@ -28,7 +28,10 @@ struct ResultView: View {
                     .font(.title)
                     .foregroundColor(.white)
                     .padding()
-                
+                Text("Average Reaction Time : " + String(format: "%.2f ms",appState.timeLimit / Double(appState.numberOfCorrectAnswers) * 1000))
+                    .font(.title)
+                    .foregroundColor(.white)
+                    .padding()
                 
                 
                 
@@ -52,6 +55,7 @@ struct ResultView: View {
                         UserDefaults.standard.set(appState.highScore, forKey: "highScore")
                     }
                     appState.elapsedTime = 0
+                    appState.remainingTime = appState.timeLimit
                     appState.score = 0
                     cpuHand = RPSHand.allCases.randomElement()!
                     instruction = RPSResult.allCases.randomElement()!

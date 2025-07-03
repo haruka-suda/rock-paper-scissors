@@ -11,8 +11,14 @@ import SwiftUI
 
 class AppState: ObservableObject {
     @Published var isInGame = false
-    @Published var timeLimit = 5.0
+    @Published var level = 1
+    @Published var levelChangeValue = 10
+    @Published var timeLimit = 30.0
+    @Published var remainingTime = 10.0
+    @Published var timeRecoveryValue = 5.0
     @Published var elapsedTime = 0.0
+    @Published var numberOfCorrectAnswers = 0
+    @Published var inARowCount = 0
     @Published var score = 0
     @Published var highScore = 0
     @Published var highScoreHistory: [String: Int] = [:]

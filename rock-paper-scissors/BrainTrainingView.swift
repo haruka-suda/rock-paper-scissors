@@ -13,6 +13,8 @@ struct BrainTrainingView: View {
     @Binding var playerHand: RPSHand
     @Binding var cpuHand: RPSHand
     @Binding var screenMode: ScreenMode
+    @State private var showAnimation = false
+    @State private var showLevelUp = false
 
     
     let timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
@@ -20,7 +22,7 @@ struct BrainTrainingView: View {
     
     var body: some View {
         ZStack{
-            Color("primaryBlue")
+            backgroundColor(for: appState.level)
                 .ignoresSafeArea()
             
             VStack{
@@ -34,11 +36,12 @@ struct BrainTrainingView: View {
                             .frame(width: 300, height: 15)
                             .foregroundColor(.gray)
                         Rectangle()
-                            .frame(width: CGFloat((appState.timeLimit-appState.elapsedTime)/appState.timeLimit)*300, height: 15)
+                            .frame(width: CGFloat(appState.remainingTime/appState.timeLimit)*300, height: 15)
                             .foregroundColor(Color("timeBar"))
                             .onReceive(timer) { _ in
                                 appState.elapsedTime += 0.01 //default 0.01
-                                if appState.elapsedTime >= appState.timeLimit{
+                                appState.remainingTime -= 0.01*(1 + Double(appState.level)*0.5)
+                                if appState.remainingTime <= 0{
                                     
                                     // record today's highscore
                                     if appState.highScoreHistory[Date().yyyymmddTag] == nil {
@@ -66,7 +69,14 @@ struct BrainTrainingView: View {
                     .font(.title)
                     .padding()
                     .foregroundColor(Color("textWhite"))
-                
+                Text(String(appState.inARowCount) + " in a row!")
+                    .font(.largeTitle)
+                    .bold()
+                    .foregroundColor(Color("textWhite"))
+                    .shadow(radius: 2)
+                    .scaleEffect(showAnimation ? 1.2 : 1)
+                    .animation(.spring(response: 0.3), value: showAnimation)
+                    .padding()
                 
                 Text(instruction.localizedText)
                     .font(.largeTitle)
@@ -81,46 +91,131 @@ struct BrainTrainingView: View {
                 
                 
                 HStack{
-                    makeHandButton(hand: .rock, color: Color("rockButton")){
+                    makeHandButton(hand: .rock, color: backgroundColor(for: appState.level)){
                         playerHand = .rock
                         if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
                             playSound(named: "correct")
                             appState.score += 1
+                            appState.numberOfCorrectAnswers += 1
+                            appState.inARowCount += 1
+                            
+                            //Combo time bonus
+                            if (appState.inARowCount % 5 == 0) && (appState.inARowCount > 1) {
+                                appState.remainingTime += appState.timeRecoveryValue
+                            }
+                            
+                            //Level Up
+                            if (appState.score % appState.levelChangeValue == 0) && (appState.score > 1) {
+                                appState.remainingTime = appState.timeLimit
+                                appState.level += 1
+                                showLevelUp = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
+                                    showLevelUp = false
+                                }
+                            }
+                            
+                            //Animation
+                            showAnimation = false
+                            DispatchQueue.main.async{
+                                showAnimation = true
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
+                                showAnimation = false
+                            }
                         }else {
                             playSound(named: "wrong")
-                            appState.score -= 3
+                            appState.inARowCount = 0
                         }
                         cpuHand = RPSHand.allCases.randomElement()!
                         instruction = RPSResult.allCases.randomElement()!
                     }
                     
-                    makeHandButton(hand: .paper, color: Color("paperButton")){
+                    makeHandButton(hand: .paper, color: backgroundColor(for: appState.level)){
                         playerHand = .paper
                         if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
                             playSound(named: "correct")
+                            appState.numberOfCorrectAnswers += 1
+                            appState.inARowCount += 1
                             appState.score += 1
+                            //Combo time bonus
+                            if (appState.inARowCount % 5 == 0) && (appState.inARowCount > 1) {
+                                appState.remainingTime += appState.timeRecoveryValue
+                            }
+                            //Level Up
+                            if (appState.score % appState.levelChangeValue == 0) && (appState.score > 1) {
+                                appState.remainingTime = appState.timeLimit
+                                appState.level += 1
+                                showLevelUp = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
+                                    showLevelUp = false
+                                }
+                            }
+                            showAnimation = false
+                            DispatchQueue.main.async{
+                                showAnimation = true
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
+                                showAnimation = false
+                            }
                         }else {
                             playSound(named: "wrong")
-                            appState.score -= 3
+                            appState.inARowCount = 0
                         }
                         cpuHand = RPSHand.allCases.randomElement()!
                         instruction = RPSResult.allCases.randomElement()!
                     }
                     
-                    makeHandButton(hand: .scissors, color: Color("scissorsButton")){
+                    makeHandButton(hand: .scissors, color: backgroundColor(for: appState.level)){
                         playerHand = .scissors
                         if instruction == judgeRPS(player: playerHand, cpu: cpuHand){
                             playSound(named: "correct")
+                            appState.numberOfCorrectAnswers += 1
                             appState.score += 1
+                            appState.inARowCount += 1
+                            //Combo time bonus
+                            if (appState.inARowCount % 5 == 0) && (appState.inARowCount > 1) {
+                                appState.remainingTime += appState.timeRecoveryValue
+                            }
+                            //Level Up
+                            if (appState.score % appState.levelChangeValue == 0) && (appState.score > 1) {
+                                appState.remainingTime = appState.timeLimit
+                                appState.level += 1
+                                showLevelUp = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
+                                    showLevelUp = false
+                                }
+                            }
+                            showAnimation = false
+                            DispatchQueue.main.async{
+                                showAnimation = true
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
+                                showAnimation = false
+                            }
                         }else {
                             playSound(named: "wrong")
-                            appState.score -= 3
+                            appState.inARowCount = 0
                         }
                         cpuHand = RPSHand.allCases.randomElement()!
                         instruction = RPSResult.allCases.randomElement()!
                     }
                     
                 }.padding(50)
+            }
+            
+            //Level Up Animation
+            if showLevelUp {
+                VStack{
+                    Text("Level Up!")
+                        .font(.system(size: 40, weight: .heavy))
+                        .foregroundColor(.yellow)
+                        .shadow(radius: 4)
+                        .scaleEffect(showLevelUp ? 1.5 : 1.0)
+                        .opacity(showLevelUp ? 1.0 : 0.0)
+                        .transition(.opacity)
+                        .animation(.easeOut(duration: 0.3), value: showLevelUp)
+                    
+                }
             }
         }
     }
