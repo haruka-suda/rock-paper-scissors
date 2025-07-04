@@ -33,7 +33,11 @@
 		9A3B72322DC82323006CD8E4 /* Exceptions for "rock-paper-scissorsUITests" folder in "rock-paper-scissors" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				clap.mp3,
 				correct.mp3,
+				finished.mp3,
+				levelUp.mp3,
+				recover.mp3,
 				wrong.mp3,
 			);
 			target = 9AB73DAC2DC223530057A726 /* rock-paper-scissors */;
@@ -41,7 +45,11 @@
 		9A3B72332DC82323006CD8E4 /* Exceptions for "rock-paper-scissorsUITests" folder in "rock-paper-scissorsUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				clap.mp3,
 				correct.mp3,
+				finished.mp3,
+				levelUp.mp3,
+				recover.mp3,
 				wrong.mp3,
 			);
 			target = 9AB73DC62DC223550057A726 /* rock-paper-scissorsUITests */;

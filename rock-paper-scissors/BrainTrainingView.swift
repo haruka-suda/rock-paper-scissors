@@ -31,12 +31,13 @@ struct BrainTrainingView: View {
                         .font(.title)
                         .bold()
                         .foregroundColor(Color("textWhite"))
+                        .frame(width: 120)
                     ZStack(alignment: .leading){
                         Rectangle()
-                            .frame(width: 300, height: 15)
+                            .frame(width: 250, height: 15)
                             .foregroundColor(.gray)
                         Rectangle()
-                            .frame(width: CGFloat(appState.remainingTime/appState.timeLimit)*300, height: 15)
+                            .frame(width: CGFloat(appState.remainingTime/appState.timeLimit)*250, height: 15)
                             .foregroundColor(Color("timeBar"))
                             .onReceive(timer) { _ in
                                 appState.elapsedTime += 0.01 //default 0.01
@@ -57,12 +58,30 @@ struct BrainTrainingView: View {
                                     UserDefaults.standard.set(appState.highScoreHistory, forKey: "highScoreHistory")
                                     //appState.updateChartData()
                                     
+                                    playSound(named: "finished")
                                     screenMode = .finished
                                     appState.elapsedTime = 0
                                 }
                             }
                     }
-                    .frame(width: 300)
+                    .frame(width: 250)
+                }
+                
+                HStack{
+                    Text("Level")
+                        .font(.title)
+                        .bold()
+                        .foregroundColor(Color("textWhite"))
+                        .frame(width: 120)
+                    ZStack(alignment: .leading){
+                        Rectangle()
+                            .frame(width: 250, height: 15)
+                            .foregroundColor(.gray)
+                        Rectangle()
+                            .frame(width: CGFloat(Double(appState.score % appState.levelChangeValue)/Double(appState.levelChangeValue))*250, height: 15)
+                            .foregroundColor(Color("levelBar"))
+                    }
+                    .frame(width: 250)
                 }
                 
                 Text("score_label".localized + String(appState.score))
@@ -102,12 +121,16 @@ struct BrainTrainingView: View {
                             //Combo time bonus
                             if (appState.inARowCount % 5 == 0) && (appState.inARowCount > 1) {
                                 appState.remainingTime += appState.timeRecoveryValue
+                                playSound(named: "recover")
+                                //playSound(named: "clap")
                             }
                             
                             //Level Up
                             if (appState.score % appState.levelChangeValue == 0) && (appState.score > 1) {
                                 appState.remainingTime = appState.timeLimit
                                 appState.level += 1
+                                playSound(named: "recover")
+                                playSound(named: "levelUp")
                                 showLevelUp = true
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
                                     showLevelUp = false
@@ -140,11 +163,15 @@ struct BrainTrainingView: View {
                             //Combo time bonus
                             if (appState.inARowCount % 5 == 0) && (appState.inARowCount > 1) {
                                 appState.remainingTime += appState.timeRecoveryValue
+                                playSound(named: "recover")
+                                //playSound(named: "clap")
                             }
                             //Level Up
                             if (appState.score % appState.levelChangeValue == 0) && (appState.score > 1) {
                                 appState.remainingTime = appState.timeLimit
                                 appState.level += 1
+                                playSound(named: "recover")
+                                playSound(named: "levelUp")
                                 showLevelUp = true
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
                                     showLevelUp = false
@@ -175,11 +202,15 @@ struct BrainTrainingView: View {
                             //Combo time bonus
                             if (appState.inARowCount % 5 == 0) && (appState.inARowCount > 1) {
                                 appState.remainingTime += appState.timeRecoveryValue
+                                playSound(named: "recover")
+                                //playSound(named: "clap")
                             }
                             //Level Up
                             if (appState.score % appState.levelChangeValue == 0) && (appState.score > 1) {
                                 appState.remainingTime = appState.timeLimit
                                 appState.level += 1
+                                playSound(named: "recover")
+                                playSound(named: "levelUp")
                                 showLevelUp = true
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
                                     showLevelUp = false
